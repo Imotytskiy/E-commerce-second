@@ -4,7 +4,7 @@ import profile_icon from "./profile_icon.png";
 import cart_icon from "./cart_icon.png";
 import menu_icon from "./menu_icon.png";
 import back_icon from "./back_icon.png";
-
+import hero_img from "./hero_img.jpg";
 export const assets = {
   logo_icon,
   search_icon,
@@ -12,6 +12,7 @@ export const assets = {
   cart_icon,
   menu_icon,
   back_icon,
+  hero_img,
 };
 
 export const products = {
