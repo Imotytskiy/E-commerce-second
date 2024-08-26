@@ -5,7 +5,7 @@ import Title from "../components/Title";
 import ProducItem from "../components/ProducItem";
 
 const Collection = () => {
-  const { products } = useContext(ShopContext); // Correct placement
+  const { products, search, showSearch } = useContext(ShopContext); // Correct placement
   const [showFilter, setShowFilter] = useState(true);
   const [filterProducts, setFilterProducts] = useState(products); // Initialize with all products
   const [category, setCategory] = useState([]);
@@ -32,6 +32,13 @@ const Collection = () => {
 
   const applyFilter = () => {
     let productsCopy = products.slice();
+
+    if (showSearch && search) {
+      productsCopy = productsCopy.filter((item) =>
+        item.name.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+
     if (category.length > 0) {
       productsCopy = productsCopy.filter((item) =>
         category.includes(item.category)
@@ -65,16 +72,11 @@ const Collection = () => {
 
   useEffect(() => {
     applyFilter();
-  }, [category, subCategory]);
+  }, [category, subCategory, search, showSearch]);
 
   useEffect(() => {
     sortProduct();
   }, [sortType]);
-
-  // Render all products on the first render
-  useEffect(() => {
-    setFilterProducts(products);
-  }, [products]);
 
   return (
     <div className="flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10 border-t">
@@ -185,7 +187,7 @@ const Collection = () => {
             <ProducItem
               key={index}
               name={item.name}
-              id={item.id}
+              id={item._id}
               price={item.price}
               image={item.image}
             />
