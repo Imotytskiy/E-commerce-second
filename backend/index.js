@@ -275,6 +275,51 @@ app.post("/addproduct", upload.array("images", 10), async (req, res) => {
   }
 });
 
+app.post("/removeproduct", async (req, res) => {
+  try {
+    const result = await Product.findOneAndDelete({ _id: req.body._id });
+    if (result) {
+      res.json({
+        success: true,
+        message: `Product ${req.body._id} removed successfully`,
+      });
+    } else {
+      res.status(404).json({ success: false, message: "Product not found" });
+    }
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: "Error removing product", error });
+  }
+});
+//Creating API for get all products
+
+app.get("/allproducts", async (req, res) => {
+  try {
+    // Fetch all products from the database
+    const products = await Product.find({});
+
+    // Log the operation
+    console.log("All Products Fetched");
+
+    // Respond with the fetched products
+    res.status(200).json({
+      success: true,
+      message: "Products fetched successfully",
+      data: products,
+    });
+  } catch (error) {
+    // Handle any errors that occur
+    console.error("Error fetching products:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Error fetching products",
+      error: error.message,
+    });
+  }
+});
+
 // Start Server
 app.listen(port, (error) => {
   if (!error) {
