@@ -212,7 +212,7 @@ const Product = mongoose.model("Product", {
   name: { type: String, required: true },
   description: { type: String },
   price: { type: Number, required: true },
-  image: { type: String }, // Single image field
+  image: [{ type: String }], // Single image field    nklnklnkln
   category: { type: String, required: true },
   subCategory: { type: String },
   sizes: [{ type: String }],
