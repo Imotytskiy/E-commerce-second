@@ -212,7 +212,7 @@ const Product = mongoose.model("Product", {
   name: { type: String, required: true },
   description: { type: String },
   price: { type: Number, required: true },
-  image: [{ type: String }], // Single image field    nklnklnkln
+  images: [{ type: String }], // Updated to "images" array
   category: { type: String, required: true },
   subCategory: { type: String },
   sizes: [{ type: String }],
@@ -234,7 +234,7 @@ app.post("/upload", upload.single("product"), (req, res) => {
 });
 
 // Add Product Endpoint
-app.post("/addproduct", upload.array("images", 10), async (req, res) => {
+app.post("/addproduct", async (req, res) => {
   try {
     console.log("Received product data:", req.body);
 
@@ -251,8 +251,8 @@ app.post("/addproduct", upload.array("images", 10), async (req, res) => {
       _id: uuidv4(),
       name: req.body.name,
       description: req.body.description,
-      price: req.body.price,
-      images: req.files ? req.files.map((file) => file.filename) : [], // Handle multiple file uploads
+      price: Number(req.body.price), // Ensure price is a number
+      images: req.body.image || [], // Ensure "images" matches the schema
       category: req.body.category,
       subCategory: req.body.subCategory,
       sizes: Array.isArray(req.body.sizes)
@@ -292,26 +292,19 @@ app.post("/removeproduct", async (req, res) => {
       .json({ success: false, message: "Error removing product", error });
   }
 });
-//Creating API for get all products
 
+// Creating API for getting all products
 app.get("/allproducts", async (req, res) => {
   try {
-    // Fetch all products from the database
     const products = await Product.find({});
-
-    // Log the operation
     console.log("All Products Fetched");
-
-    // Respond with the fetched products
     res.status(200).json({
       success: true,
       message: "Products fetched successfully",
       data: products,
     });
   } catch (error) {
-    // Handle any errors that occur
     console.error("Error fetching products:", error);
-
     res.status(500).json({
       success: false,
       message: "Error fetching products",
