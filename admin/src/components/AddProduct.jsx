@@ -43,8 +43,30 @@ const AddProduct = () => {
           ...productDetails,
           image: responseData.image_url,
         };
+
         console.log(updatedProduct);
+
         // Here you can send this `updatedProduct` to the backend to save the product details
+        const productResponse = await fetch(
+          "http://localhost:4000/addproduct",
+          {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json", // Corrected typo
+            },
+            body: JSON.stringify(updatedProduct),
+          }
+        );
+
+        const productData = await productResponse.json();
+
+        if (productData.success) {
+          console.log("Product added successfully:", productData.product);
+          // You can reset the form or show a success message here
+        } else {
+          console.error("Failed to add product:", productData.message);
+        }
       }
     } catch (error) {
       console.error("Error adding product:", error);
@@ -58,6 +80,7 @@ const AddProduct = () => {
   const changeHandler = (e) => {
     setProductDetails({ ...productDetails, [e.target.name]: e.target.value });
   };
+  // I cant see url at mongo db data.image
 
   return (
     <div className=" flex flex-col w-full items-start gap-3">
