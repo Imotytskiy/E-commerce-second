@@ -9,7 +9,7 @@ const Admin = () => {
   return (
     <div className="flex">
       <Sidebar />
-      {/* className="w-[10%] mx-auto ml-[max(5vw,25px)] my-8 text-gray-600 text-base" */}
+
       <div>
         <Routes>
           <Route path="/add" element={<AddProduct />} />

@@ -3,27 +3,37 @@
 
 // const AddProduct = () => {
 //   const [image, setImage] = useState(null);
+//   const [selectedSizes, setSelectedSizes] = useState([]);
 //   const [productDetails, setProductDetails] = useState({
 //     name: "",
 //     description: "",
 //     price: "",
-//     image: "",
 //     category: "Men",
 //     subCategory: "",
-//     sizes: "",
 //     bestseller: false,
 //   });
+
+//   const handleSizeClick = (size) => {
+//     setSelectedSizes(
+//       (prevSizes) =>
+//         prevSizes.includes(size)
+//           ? prevSizes.filter((s) => s !== size) // Remove size if already selected
+//           : [...prevSizes, size] // Add size if not already selected
+//     );
+//   };
 
 //   const Add_Product = async () => {
 //     let responseData;
 //     const formData = new FormData();
 //     formData.append("product", image); // Ensure this name matches your multer field
 
-//     // You can add other product details to the formData if needed
+//     // Append product details to formData
 //     formData.append("name", productDetails.name);
 //     formData.append("price", productDetails.price);
 //     formData.append("category", productDetails.category);
 //     formData.append("description", productDetails.description);
+//     formData.append("sizes", JSON.stringify(selectedSizes)); // Convert sizes array to JSON string
+//     formData.append("bestseller", productDetails.bestseller);
 
 //     try {
 //       const response = await fetch("http://localhost:4000/upload", {
@@ -45,18 +55,17 @@
 //         const updatedProduct = {
 //           ...productDetails,
 //           image: [responseData.image_url],
+//           sizes: selectedSizes, // Include sizes in the product data
 //         };
 
-//         console.log(updatedProduct);
-
-//         // Here you can send this `updatedProduct` to the backend to save the product details
+//         // Send the product data to the backend
 //         const productResponse = await fetch(
 //           "http://localhost:4000/addproduct",
 //           {
 //             method: "POST",
 //             headers: {
 //               Accept: "application/json",
-//               "Content-Type": "application/json", // Corrected typo
+//               "Content-Type": "application/json",
 //             },
 //             body: JSON.stringify(updatedProduct),
 //           }
@@ -66,9 +75,11 @@
 
 //         if (productData.success) {
 //           console.log("Product added successfully:", productData.product);
-//           // You can reset the form or show a success message here
+//           alert("Product added successfully:", productData.product);
+//           // Reset the form or show a success message here
 //         } else {
 //           console.error("Failed to add product:", productData.message);
+//           alert("Failed to add product:", productData.message);
 //         }
 //       }
 //     } catch (error) {
@@ -83,10 +94,9 @@
 //   const changeHandler = (e) => {
 //     setProductDetails({ ...productDetails, [e.target.name]: e.target.value });
 //   };
-//   // I cant see url at mongo db data.image
 
 //   return (
-//     <div className=" flex flex-col w-full items-start gap-3">
+//     <div className="bd-gray-50 min-h-screen">
 //       <div className="w-full">
 //         <p className="mb-2">Назва речі</p>
 //         <input
@@ -105,18 +115,17 @@
 //           className="w-full max-w-[600px] px-3 py-2 border-2"
 //           value={productDetails.description}
 //           onChange={changeHandler}
-//           type="text"
 //           name="description"
 //           placeholder="Write content"
 //         />
 //       </div>
-//       <div className="">
+//       <div className="w-full">
 //         <p className="mb-2">Category</p>
 //         <select
 //           value={productDetails.category}
 //           onChange={changeHandler}
 //           name="category"
-//           className=""
+//           className="px-3 py-2 border-2"
 //         >
 //           <option value="boys">Boys</option>
 //           <option value="girls">Girls</option>
@@ -124,25 +133,24 @@
 //         </select>
 //       </div>
 
-//       <p mb-2>Sub category</p>
-//       <select
-//         classNamew-full
-//         px-3
-//         py-2
-//         value={productDetails.subCategory}
-//         onChange={changeHandler}
-//         name="subCategory"
-//         className=""
-//       >
-//         <option value="Topwear">Topwear</option>
-//         <option value="Bootomwear">Bottomwear</option>
-//         <option value="Winterwear">Winterwear</option>
-//       </select>
+//       <div className="w-full">
+//         <p className="mb-2">Sub category</p>
+//         <select
+//           className="w-full px-3 py-2 border-2"
+//           value={productDetails.subCategory}
+//           onChange={changeHandler}
+//           name="subCategory"
+//         >
+//           <option value="Topwear">Topwear</option>
+//           <option value="Bottomwear">Bottomwear</option>
+//           <option value="Winterwear">Winterwear</option>
+//         </select>
+//       </div>
 
 //       <div className="w-full">
-//         <p mb-2>Product price</p>
+//         <p className="mb-2">Product price</p>
 //         <input
-//           className="w-full px-3 py-2 sm:w-[120px]"
+//           className="w-full px-3 py-2 border-2"
 //           value={productDetails.price}
 //           onChange={changeHandler}
 //           type="number"
@@ -151,60 +159,42 @@
 //         />
 //       </div>
 
-//       <div className="">
-//         <div>
-//           <p className="mb-2">Product Sizes</p>
-//           <div className="flex gap-3">
-//             <div>
+//       <div className="w-full">
+//         <p className="mb-2">Product Sizes</p>
+//         <div className="flex gap-3">
+//           {["S", "M", "L", "XL", "XXL"].map((size) => (
+//             <div key={size}>
 //               <p
-//                 onClick={() => {}}
-//                 className="bg-slate-200 px-3 py-1 cursor-pointer"
+//                 onClick={() => handleSizeClick(size)}
+//                 className={`bg-slate-200 px-3 py-1 cursor-pointer ${
+//                   selectedSizes.includes(size) ? "bg-blue-500 text-white" : ""
+//                 }`}
 //               >
-//                 S
+//                 {size}
 //               </p>
 //             </div>
-//             <div>
-//               <p
-//                 onClick={() => {}}
-//                 className="bg-slate-200 px-3 py-1 cursor-pointer"
-//               >
-//                 M
-//               </p>
-//             </div>
-//             <div>
-//               <p
-//                 onClick={() => {}}
-//                 className="bg-slate-200 px-3 py-1 cursor-pointer"
-//               >
-//                 L
-//               </p>
-//             </div>
-//             <div>
-//               <p
-//                 onClick={() => {}}
-//                 className="bg-slate-200 px-3 py-1 cursor-pointer"
-//               >
-//                 XL
-//               </p>
-//             </div>
-//             <div>
-//               <p
-//                 onClick={() => {}}
-//                 className="bg-slate-200 px-3 py-1 cursor-pointer"
-//               >
-//                 XXL
-//               </p>
-//             </div>
-//           </div>
-//           <div className="flex gap-2 mt-2">
-//             <input type="checkbox" id="bestseller" />
-//             <label className="cursor-pointer" for="bestseller">
-//               Add to bestseller
-//             </label>
-//           </div>
+//           ))}
 //         </div>
 //       </div>
-//       <div className="flex gap-2">
+
+//       <div className="flex gap-2 mt-2">
+//         <input
+//           type="checkbox"
+//           id="bestseller"
+//           checked={productDetails.bestseller}
+//           onChange={() =>
+//             setProductDetails((prev) => ({
+//               ...prev,
+//               bestseller: !prev.bestseller,
+//             }))
+//           }
+//         />
+//         <label className="cursor-pointer" htmlFor="bestseller">
+//           Add to bestseller
+//         </label>
+//       </div>
+
+//       <div className="flex gap-2 mt-4">
 //         <label htmlFor="file-input">
 //           <img
 //             className="w-40 h-40"
@@ -254,6 +244,19 @@ const AddProduct = () => {
           ? prevSizes.filter((s) => s !== size) // Remove size if already selected
           : [...prevSizes, size] // Add size if not already selected
     );
+  };
+
+  const resetForm = () => {
+    setProductDetails({
+      name: "",
+      description: "",
+      price: "",
+      category: "Men",
+      subCategory: "",
+      bestseller: false,
+    });
+    setSelectedSizes([]);
+    setImage(null);
   };
 
   const Add_Product = async () => {
@@ -309,9 +312,13 @@ const AddProduct = () => {
 
         if (productData.success) {
           console.log("Product added successfully:", productData.product);
-          // Reset the form or show a success message here
+          alert("Product added successfully!");
+
+          // Reset the form after successful submission
+          resetForm();
         } else {
           console.error("Failed to add product:", productData.message);
+          alert("Failed to add product:", productData.message);
         }
       }
     } catch (error) {
@@ -328,7 +335,7 @@ const AddProduct = () => {
   };
 
   return (
-    <div className="flex flex-col w-full items-start gap-3">
+    <div className="bd-gray-50 min-h-screen">
       <div className="w-full">
         <p className="mb-2">Назва речі</p>
         <input
@@ -388,6 +395,9 @@ const AddProduct = () => {
           type="number"
           name="price"
           placeholder="Type here"
+          min="0" // Ensures only positive numbers are allowed
+          step="0.01" // Allows input for decimals (e.g., 19.99)
+          required
         />
       </div>
 
