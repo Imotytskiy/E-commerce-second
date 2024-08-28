@@ -41,7 +41,7 @@ const AddProduct = () => {
       if (responseData.success) {
         const updatedProduct = {
           ...productDetails,
-          image: responseData.image_url,
+          image: [responseData.image_url],
         };
 
         console.log(updatedProduct);
