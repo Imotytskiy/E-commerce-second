@@ -176,6 +176,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const multer = require("multer");
 const path = require("path");
+const jwt = require("jsonwebtoken");
 const cors = require("cors");
 const { v4: uuidv4 } = require("uuid");
 
@@ -313,6 +314,85 @@ app.get("/allproducts", async (req, res) => {
   }
 });
 
+const Users = mongoose.model("Users", {
+  name: {
+    type: String,
+  },
+  email: {
+    type: String,
+    unique: true,
+  },
+  password: {
+    type: String,
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+});
+//endpoint for regis
+app.post("/signup", async (req, res) => {
+  let check = await Users.findOne({ email: req.body.email });
+  if (check) {
+    return res
+      .status(400)
+      .json({ success: false, errors: "existing user found" });
+  }
+  let cart = {};
+  for (let i = 0; i < 300; i++) {
+    cart[i] = 0;
+  }
+
+  const user = new Users({
+    name: req.user,
+    email: req.body.email,
+    password: req.body.password,
+    cartData: cart,
+  });
+
+  await user.save();
+
+  const data = {
+    user: {
+      id: user.id,
+    },
+  };
+  const token = jwt.sign(data, "secret_ecom");
+  res.json({ success: true, token });
+});
+//create endpoint for user login
+app.post("/login", async (req, res) => {
+  try {
+    // Find user by email
+    let user = await Users.findOne({ email: req.body.email });
+
+    if (!user) {
+      return res.status(400).json({ success: false, errors: "Wrong Email Id" });
+    }
+
+    // Compare the provided password with the stored password
+    const passCompare = req.body.password === user.password;
+
+    if (!passCompare) {
+      return res.status(400).json({ success: false, errors: "Wrong password" });
+    }
+
+    // Generate JWT token
+    const data = {
+      user: {
+        id: user.id,
+      },
+    };
+    const token = jwt.sign(data, "secret_ecom");
+
+    // Send the token as a response
+    res.json({ success: true, token });
+  } catch (error) {
+    // Handle errors
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
 // Start Server
 app.listen(port, (error) => {
   if (!error) {
