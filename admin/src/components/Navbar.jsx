@@ -8,7 +8,7 @@ const Navbar = () => {
     <>
       <div className="flex items-center py-2 px-[4%] justify-between">
         <img
-          className="w-[40%] max-w-[100px]"
+          className="w-[60%] max-w-[100px]"
           src={assets.logo_icon}
           alt="Logo"
         />

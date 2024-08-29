@@ -5,7 +5,7 @@ import Admin from "./pages/Admin";
 
 const App = () => {
   return (
-    <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
+    <div>
       <ToastContainer autoClose={4000} />
       <Navbar />
       <Admin />

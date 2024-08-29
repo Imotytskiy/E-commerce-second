@@ -7,7 +7,7 @@ import OrdersProduct from "../components/OrdersProduct";
 
 const Admin = () => {
   return (
-    <div className="flex">
+    <div className="flex justify-evenly">
       <Sidebar />
 
       <div>

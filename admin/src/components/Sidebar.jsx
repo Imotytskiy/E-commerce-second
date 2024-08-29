@@ -6,8 +6,8 @@ import orders_icon from "../assets/orders_icon.png";
 
 const Sidebar = () => {
   return (
-    <div className="flex w-[50%]">
-      <div className="w-[30%] min-h-screen border-r-2">
+    <div className="flex justify-center">
+      <div className="w-full x min-h-screen border-r-2">
         <div className="flex flex-col gap-4 pt-6 pl-[20%] text-[15px]">
           <Link
             to="/add"
