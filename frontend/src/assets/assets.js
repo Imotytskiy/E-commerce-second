@@ -4,14 +4,15 @@ import profile_icon from "./profile_icon.png";
 import cart_icon from "./cart_icon.png";
 import menu_icon from "./menu_icon.png";
 import back_icon from "./back_icon.png";
-import hero_img from "./hero_img.jpg";
+import hero_img from "./hero2_img.png";
 import exchange_icon from "./exchange_icon.png";
 import quality_icon from "./quality_icon.png";
 import support_img from "./support_img.png";
 import cross_icon from "./cross_icon.png";
 import bin_icon from "./bin_icon.png";
 import mastercard_logo from "./mastercard_logo.svg";
-
+import about from "./about.jpg";
+import contact from "./contact_img.png";
 export const assets = {
   logo_icon,
   search_icon,
@@ -26,6 +27,8 @@ export const assets = {
   cross_icon,
   bin_icon,
   mastercard_logo,
+  about,
+  contact,
 };
 
 export const products = [
