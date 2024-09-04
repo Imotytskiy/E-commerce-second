@@ -8,7 +8,7 @@ import { ShopContext } from "../context/ShopContext";
 const PlaceOrder = () => {
   const [method, setMethod] = useState("cod");
   const navigate = useNavigate();
-  const { getCartAmount } = useContext(ShopContext);
+  // const { getCartAmount } = useContext(ShopContext);
   const [deliveryInfo, setDeliveryInfo] = useState({
     name: "",
     surname: "",

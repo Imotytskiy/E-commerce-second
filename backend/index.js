@@ -345,9 +345,8 @@ const DeliveryInfo = mongoose.model("DeliveryInfo", {
     required: false,
   },
   phone: {
-    type: String,
+    type: Number,
     required: true,
-    match: [/^\d{10,15}$/, "Please enter a valid phone number"], // Basic phone number validation
   },
   building: {
     type: String, // String type to accommodate alphanumeric building numbers
