@@ -314,6 +314,65 @@ app.get("/allproducts", async (req, res) => {
   }
 });
 
+const DeliveryInfo = mongoose.model("DeliveryInfo", {
+  name: {
+    type: String,
+    required: true,
+  },
+  surname: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+    match: [/.+@.+\..+/, "Please enter a valid email address"], // Basic email validation
+  },
+  address: {
+    type: String,
+    required: true,
+  },
+  city: {
+    type: String,
+    required: true,
+  },
+  country: {
+    type: String,
+    required: true,
+  },
+  postalCode: {
+    type: String,
+    required: false,
+  },
+  phone: {
+    type: String,
+    required: true,
+    match: [/^\d{10,15}$/, "Please enter a valid phone number"], // Basic phone number validation
+  },
+  building: {
+    type: String, // String type to accommodate alphanumeric building numbers
+    required: false, // Not required
+  },
+  appartment: {
+    type: String, // String type to accommodate alphanumeric apartment numbers
+    required: false, // Not required
+  },
+});
+
+// Create the model from the schema
+
+app.post("/delivery", async (req, res) => {
+  try {
+    console.log("Received delivery info:", req.body); // Log incoming data
+    const deliveryInfo = new DeliveryInfo(req.body);
+    await deliveryInfo.save();
+    res.status(201).send(deliveryInfo);
+  } catch (error) {
+    console.error("Error saving delivery info:", error.message); // Log error message
+    res.status(400).send({ error: "Failed to save delivery information" });
+  }
+});
+
 const Users = mongoose.model("Users", {
   name: {
     type: String,

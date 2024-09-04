@@ -3,10 +3,60 @@ import CartTotal from "../components/CartTotal";
 import Title from "../components/Title";
 import { assets } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
+import { ShopContext } from "../context/ShopContext";
 
 const PlaceOrder = () => {
   const [method, setMethod] = useState("cod");
   const navigate = useNavigate();
+  // const { getCartAmount } = useContext(ShopContext);
+  const [deliveryInfo, setDeliveryInfo] = useState({
+    name: "",
+    surname: "",
+    email: "",
+    address: "",
+    city: "",
+    country: "",
+    postalCode: "",
+    phone: "",
+    building: "",
+    appartment: "",
+    // amount: getCartAmount,
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setDeliveryInfo((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("http://localhost:4000/delivery", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...deliveryInfo, method }), // Ensure deliveryInfo and method are correctly included
+      });
+
+      if (response.ok) {
+        // Navigate to orders page
+        navigate("/place-order");
+      } else {
+        const errorResponse = await response.json();
+        console.error("Failed to place order:", errorResponse);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex flex-col sm:flex-row justify-between gap-4 pt-5 sm:pt-14 min-h-[80vh]">
@@ -20,51 +70,78 @@ const PlaceOrder = () => {
             className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
             type="text"
             placeholder="Ім`я"
+            name="name"
+            value={deliveryInfo.name}
+            onChange={handleInputChange}
           />
           <input
             className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
             type="text"
             placeholder="Прізвище"
+            name="surname"
+            value={deliveryInfo.surname}
+            onChange={handleInputChange}
           />
         </div>
         <input
           className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
           type="email"
           placeholder="Email адреса"
+          name="email"
+          value={deliveryInfo.email}
+          onChange={handleInputChange}
         />
         <input
           className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
           type="text"
           placeholder="Адреса"
+          name="address"
+          value={deliveryInfo.address}
+          onChange={handleInputChange}
         />
         <div className="flex gap-3">
           <input
             className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
             type="text"
             placeholder="Місто"
+            name="city"
+            value={deliveryInfo.city}
+            onChange={handleInputChange}
           />
           <input
             className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
             type="text"
             placeholder="Країна"
+            name="country"
+            value={deliveryInfo.country}
+            onChange={handleInputChange}
           />
         </div>
         <div className="flex gap-3">
           <input
             className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
-            type="number"
-            placeholder=""
+            type="text"
+            placeholder="Building"
+            name="building"
+            value={deliveryInfo.building}
+            onChange={handleInputChange}
           />
           <input
             className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
             type="text"
-            placeholder=""
+            placeholder="Apartment"
+            name="appartment"
+            value={deliveryInfo.appartment}
+            onChange={handleInputChange}
           />
         </div>
         <input
           className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
           type="number"
           placeholder="Phone"
+          name="phone"
+          value={deliveryInfo.phone}
+          onChange={handleInputChange}
         />
       </div>
 
@@ -106,10 +183,10 @@ const PlaceOrder = () => {
         </div>
         <div className="w-full text-end mt-8">
           <button
-            onClick={() => navigate("/orders")}
+            onClick={handleSubmit}
             className="bg-black text-white px-16 py-3 text-sm"
           >
-            ЗАМОВИТИ
+            {loading ? "Processing..." : "ЗАМОВИТИ"}
           </button>
         </div>
       </div>
