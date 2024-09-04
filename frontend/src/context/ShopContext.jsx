@@ -69,6 +69,13 @@ const ShopContextProvider = (props) => {
   // useEffect(() => {
   //   console.log(cartItems, "Hello");
   // }, [cartItems]);
+  const cartData = Object.keys(cartItems).flatMap((itemId) =>
+    Object.keys(cartItems[itemId]).map((size) => ({
+      _id: itemId,
+      size,
+      quantity: cartItems[itemId][size],
+    }))
+  );
 
   const value = {
     products,
@@ -83,6 +90,7 @@ const ShopContextProvider = (props) => {
     getCartCount,
     updateQuantity,
     getCartAmount,
+    cartData, // Added this line
   };
 
   return (

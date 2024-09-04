@@ -1,14 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import CartTotal from "../components/CartTotal";
 import Title from "../components/Title";
 import { assets } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
-
 const PlaceOrder = () => {
   const [method, setMethod] = useState("cod");
   const navigate = useNavigate();
-  // const { getCartAmount } = useContext(ShopContext);
+  const { cartData } = useContext(ShopContext);
   const [deliveryInfo, setDeliveryInfo] = useState({
     name: "",
     surname: "",
@@ -20,8 +19,16 @@ const PlaceOrder = () => {
     phone: "",
     building: "",
     appartment: "",
-    // amount: getCartAmount,
+    cartData: [], // Add cartData here
   });
+
+  // Example of updating cartData in state
+  const updateCartData = (newCartData) => {
+    setDeliveryInfo((prevState) => ({
+      ...prevState,
+      cartData: newCartData,
+    }));
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -35,6 +42,7 @@ const PlaceOrder = () => {
 
   const handleSubmit = async () => {
     setLoading(true);
+    console.log("Cart Data:", cartData);
     try {
       const response = await fetch("http://localhost:4000/delivery", {
         method: "POST",
