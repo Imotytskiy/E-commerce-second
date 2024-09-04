@@ -360,6 +360,10 @@ const DeliveryInfo = mongoose.model("DeliveryInfo", {
     type: String, // String type to accommodate alphanumeric apartment numbers
     required: false, // Not required
   },
+  method: {
+    type: String, // String type to accommodate alphanumeric apartment numbers
+    required: false, // Not required
+  },
 });
 
 // Create the model from the schema
