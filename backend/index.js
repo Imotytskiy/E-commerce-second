@@ -356,6 +356,10 @@ const DeliveryInfo = mongoose.model("DeliveryInfo", {
     type: String, // String type to accommodate alphanumeric apartment numbers
     required: false, // Not required
   },
+  cartData: {
+    type: String, // String type to accommodate alphanumeric apartment numbers
+    required: false, // Not required
+  },
 });
 
 // Create the model from the schema
@@ -369,6 +373,31 @@ app.post("/delivery", async (req, res) => {
   } catch (error) {
     console.error("Error saving delivery info:", error.message); // Log error message
     res.status(400).send({ error: "Failed to save delivery information" });
+  }
+});
+
+app.get("/delivery", async (req, res) => {
+  try {
+    const deliveries = await DeliveryInfo.find(); // Find all documents in the DeliveryInfo collection
+    res.status(200).json(deliveries); // Send the retrieved data as a JSON response
+  } catch (error) {
+    res.status(500).json({ message: "Error retrieving deliveries", error });
+  }
+});
+
+app.post("/removeorder", async (req, res) => {
+  const { _id } = req.body;
+  try {
+    const result = await DeliveryInfo.deleteOne({ _id });
+    if (result.deletedCount === 1) {
+      res.status(200).json({ success: true });
+    } else {
+      res.status(404).json({ success: false, message: "Order not found" });
+    }
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: "Error deleting order", error });
   }
 });
 
