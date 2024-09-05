@@ -18,7 +18,7 @@ const ListProduct = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch("http://localhost:4000/removeorder", {
+      const response = await fetch("http://localhost:4000/removeproduct", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -46,7 +46,7 @@ const ListProduct = () => {
       <h1 className="mb-2 text-center">All Products List</h1>
       <div className="flex flex-col gap-2">
         {/* Header Row */}
-        <div className="hidden md:grid grid-cols-[3fr_2fr_1fr_1fr_1fr] items-center py-1 px-2 border bg-gray-100 text-sm">
+        <div className="hidden md:grid grid-cols-[1fr_2fr_1fr_1fr_1fr] items-center py-1 px-2 border bg-gray-100 text-sm">
           <b>Image</b>
           <b>Name</b>
           <b>Category</b>
@@ -65,18 +65,18 @@ const ListProduct = () => {
           return (
             <div
               key={index}
-              className="grid grid-cols-[1fr_3fr_1fr] md:grid-cols-[1fr_3fr_1fr_1fr_1fr] items-center gap-2 py-1 px-2 border text-sm"
+              className="grid grid-cols-[1fr_2fr_1fr_1fr_1fr] md:grid-cols-[1fr_2fr_1fr_1fr_1fr] items-center gap-2 py-1 px-2 border text-sm"
             >
               <img className="w-12" src={imageSrc} alt={product.name} />
               <p>{product.name}</p>
               <p>{product.category}</p>
-              <p>{product.subcategory}</p>
+
               <p>{product.price}</p>
               <p
-                className="cursor-pointer"
+                className="cursor-pointer text-red-600 hover:text-red-800 bg-gray-200 rounded-full px-3 py-1 transition-all duration-300 ease-in-out transform hover:scale-105"
                 onClick={() => handleDelete(product._id)} // Add click handler
               >
-                X
+                DELETE
               </p>
             </div>
           );

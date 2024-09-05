@@ -6,7 +6,7 @@ import orders_icon from "../assets/orders_icon.png";
 
 const Sidebar = () => {
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-start">
       <div className="w-full x min-h-screen border-r-2">
         <div className="flex flex-col gap-4 pt-6 pl-[20%] text-[15px]">
           <Link

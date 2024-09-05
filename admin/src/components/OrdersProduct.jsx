@@ -65,8 +65,8 @@ const OrdersProduct = () => {
 
   return (
     <div>
-      <h1>Orders</h1>
-      <div>
+      <h1 className="">Orders</h1>
+      <div className="">
         {deliveries.map((delivery) => (
           <div key={delivery._id} className="border p-4 mb-4">
             <h2>Order ID: {delivery._id}</h2>
