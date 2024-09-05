@@ -380,7 +380,7 @@ app.post("/delivery", async (req, res) => {
   }
 });
 
-app.get("/delivery", async (req, res) => {
+app.get("/alldelivery", async (req, res) => {
   try {
     const deliveries = await DeliveryInfo.find(); // Find all documents in the DeliveryInfo collection
     res.status(200).json(deliveries); // Send the retrieved data as a JSON response

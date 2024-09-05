@@ -18,7 +18,7 @@ const ListProduct = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch("http://localhost:4000/removeproduct", {
+      const response = await fetch("http://localhost:4000/removeorder", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

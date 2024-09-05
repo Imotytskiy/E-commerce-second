@@ -404,7 +404,7 @@ const AddProduct = () => {
       <div className="w-full">
         <p className="mb-2">Product Sizes</p>
         <div className="flex gap-3">
-          {["S", "M", "L", "XL", "XXL"].map((size) => (
+          {["50", "56", "62", "68", "74", "80", "86", "92"].map((size) => (
             <div key={size}>
               <p
                 onClick={() => handleSizeClick(size)}

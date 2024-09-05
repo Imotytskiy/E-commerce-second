@@ -5,26 +5,62 @@ const OrdersProduct = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Fetch deliveries when the component mounts
   useEffect(() => {
     const fetchDeliveries = async () => {
       try {
-        const response = await fetch("http://localhost:4000/delivery");
+        const response = await fetch("http://localhost:4000/alldelivery");
         if (!response.ok) {
           throw new Error("Failed to fetch deliveries");
         }
         const data = await response.json();
-        setDeliveries(data);
+        setDeliveries(data); // Store the fetched deliveries in state
       } catch (err) {
-        setError(err.message);
+        setError(err.message); // Store any error in state
       } finally {
-        setLoading(false);
+        setLoading(false); // Stop loading after fetching
       }
     };
 
     fetchDeliveries();
   }, []);
 
+  // Handle delete functionality
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this order?"
+    );
+    if (!confirmDelete) return; // Exit if deletion is not confirmed
+
+    try {
+      const response = await fetch("http://localhost:4000/removeorder", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ _id: id }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      if (result.success) {
+        // Update deliveries state to remove the deleted order
+        setDeliveries(deliveries.filter((delivery) => delivery._id !== id));
+      } else {
+        console.error("Failed to delete order:", result.message);
+      }
+    } catch (error) {
+      console.error("Error deleting order:", error);
+    }
+  };
+
+  // Show loading message
   if (loading) return <p>Loading...</p>;
+
+  // Show error message if fetching failed
   if (error) return <p>Error: {error}</p>;
 
   return (
@@ -54,6 +90,13 @@ const OrdersProduct = () => {
                 </li>
               ))}
             </ul>
+            {/* Delete button */}
+            <p
+              className="cursor-pointer text-red-600 font-bold"
+              onClick={() => handleDelete(delivery._id)} // Correcting the reference to delivery._id
+            >
+              Delete Order
+            </p>
           </div>
         ))}
       </div>
