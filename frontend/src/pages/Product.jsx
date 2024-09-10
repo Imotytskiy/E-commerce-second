@@ -69,15 +69,16 @@ import RelatedProducts from "../components/RelatedProducts";
 const Product = () => {
   const { productId } = useParams();
   const { products, currency, addToCart } = useContext(ShopContext);
+  console.log("products from Context", products);
   const [productData, setProductData] = useState(null);
-  const [image, setImage] = useState("");
+  const [images, setImage] = useState("");
   const [size, setSize] = useState("");
 
   const fetchProductData = async () => {
     products.map((item) => {
       if (item._id === productId) {
         setProductData(item);
-        setImage(item.image[0]);
+        setImage(item.images[0]);
         return null;
       }
     });
@@ -86,13 +87,13 @@ const Product = () => {
   useEffect(() => {
     fetchProductData();
   }, [productId, products]);
-
+  console.log("image product", images);
   return productData ? (
     <div className="border-t-2 pt-10 transition-opacity ease-in duration-500 opacity-100">
       <div className="flex gap-12 sm:gap-12 flex-col sm:flex-row">
         <div className="flex-1 flex flex-col-reverse gap-3 sm:flex-row">
           <div className="flex sm:flex-col overflow-x-auto sm:overflow-y-scroll justify-between">
-            {productData.image.map((item, index) => (
+            {productData.images.map((item, index) => (
               <img
                 onClick={() => setImage(item)}
                 src={`../${item}`} // Assuming image paths are correct and don't need `../`
@@ -105,7 +106,7 @@ const Product = () => {
           <div className="w-full sm:w-[80%]">
             <img
               className="w-full h-auto"
-              src={`../${image}`}
+              src={`${images}`}
               alt="Selected product"
             />
           </div>
